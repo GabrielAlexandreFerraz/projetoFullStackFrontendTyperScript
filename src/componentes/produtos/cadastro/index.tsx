@@ -3,17 +3,19 @@ import { Layout, Input, Message } from 'componentes'
 import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
 import { converterEmBigDecimal } from 'app/util/money'
+import { Alert } from 'componentes/common/message'
 
 export const CadastroProdutos: React.FC = () => {
 
     const service = useProdutoService()
 
-    const [sku, setSku] = useState<string>('')
-    const [preco, setPreco] = useState<string>('')
-    const [nome, setNome] = useState<string>('')
-    const [descricao, setDescricao] = useState<string>('')
-    const [id, setId] = useState<string>()
-    const [cadastro, setCadastro] = useState<string>()
+    const [ sku, setSku ] = useState<string>('')
+    const [ preco, setPreco ] = useState<string>('')
+    const [ nome, setNome ] = useState<string>('')
+    const [ descricao, setDescricao ] = useState<string>('')
+    const [ id, setId ] = useState<string>()
+    const [ cadastro, setCadastro ] = useState<string>()
+    const [ messages, setMessages ] = useState<Array<Alert>>([])
 
     const submit = () =>{
 
@@ -28,7 +30,11 @@ export const CadastroProdutos: React.FC = () => {
         if(id){
 
             service.atualizar(produto)
-            .then(response => console.log("Atualizado"))
+            .then(response => {
+                setMessages([{
+                    tipo:"success", texto:"Produto Atualizado com Sucesso"
+                }])
+            })
 
         }else{
             
@@ -36,14 +42,16 @@ export const CadastroProdutos: React.FC = () => {
             .then(produtoResposta => {
                 setId(produtoResposta.id)
                 setCadastro(produtoResposta.cadastro)
+                setMessages([{
+                    tipo:"success", texto:"Produto Salvo com Sucesso"
+                }])
             })
         }
 
     }
 
     return(
-        <Layout titulo="Cadastro de Produtos">
-            <Message field='Nome' texto='produto invalido' tipo='danger'/>
+        <Layout titulo="Cadastro de Produtos" mensagens={messages}>
             {id && 
                 <div className='columns'>
                 <Input label='Codigo:' 

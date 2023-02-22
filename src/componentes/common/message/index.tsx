@@ -3,6 +3,11 @@ interface MessageProsp{
     field?: string;
     texto: string;
 }
+export interface Alert {
+    tipo: string,
+    field?: string,
+    texto: string;
+}
 
 export const Message:React.FC<MessageProsp> = ({
     tipo,
