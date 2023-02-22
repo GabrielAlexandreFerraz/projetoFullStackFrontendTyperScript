@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Layout, Input } from 'componentes'
+import { Layout, Input, Message } from 'componentes'
 import { useProdutoService } from 'app/services'
 import { Produto } from 'app/models/produtos'
+import { converterEmBigDecimal } from 'app/util/money'
 
 export const CadastroProdutos: React.FC = () => {
 
@@ -19,7 +20,7 @@ export const CadastroProdutos: React.FC = () => {
         const produto:Produto ={
             id,
             sku,
-            preco: parseFloat(preco),
+            preco: converterEmBigDecimal(preco),
             nome,
             descricao
         }
@@ -42,6 +43,7 @@ export const CadastroProdutos: React.FC = () => {
 
     return(
         <Layout titulo="Cadastro de Produtos">
+            <Message field='Nome' texto='produto invalido' tipo='danger'/>
             {id && 
                 <div className='columns'>
                 <Input label='Codigo:' 
@@ -75,6 +77,8 @@ export const CadastroProdutos: React.FC = () => {
                 value={preco}
                 id="inputPreco" 
                 placeholder='Digite o Preço do Produto'
+                currency={true}
+                maxLength={16}
                 />
         
             </div>
